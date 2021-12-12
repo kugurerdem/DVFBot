@@ -8,8 +8,8 @@ async function main(){
 
   const bot = new DVFBot(controller);
   
-  // controller.tradeMarket("USDC:USDT", 37);
-  await bot.tradeBetween("USDC:USDT", 0.9993, 0.99965);
+  // bot.tradeMarket("USDC:USDT");
+  await bot.tradeBetween("USDC:USDT", 1, 0.999);
 }
 main();
 

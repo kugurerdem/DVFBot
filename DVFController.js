@@ -74,14 +74,14 @@ class DVF_Controller{
     }
 
     // this is needs to be improved
-    async tradeMarket(symbol, amount){
-        let price;
-        if(amount > 0){
-            price = await this.orderBookAsk(symbol);
-        } else{
-            price = await this.orderBookBid(symbol);
+    async tradeMarket(symbol, amount, price){
+        if(!price){
+            if(amount > 0){
+                price = await this.orderBookAsk(symbol);
+            } else{
+                price = await this.orderBookBid(symbol);
+            }
         }
-
         return await this.tradeLimit(symbol, amount, price);
     }
 
