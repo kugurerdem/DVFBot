@@ -6,6 +6,7 @@ class DVFBot{
         this.sleepTime = 2500;
         this.buyPrice;
         this.sellPrice;
+        this.lastOrderPrice;
     }
 
     /**
@@ -56,8 +57,10 @@ class DVFBot{
     async _tradeBetween(symbol){
         try{
             let args = await this.sellHighestBalance(symbol);
-            await this.controller.tradeLimit(...args, args[1][0] == '-' ? this.sellPrice : this.buyPrice);
+            let price = args[1][0] == '-' ? this.sellPrice : this.buyPrice;
+            await this.controller.tradeLimit(...args, price);
             console.log("Order opened");
+            this.lastOrderPrice = price;
         } catch(e){
             // something
         } finally{
@@ -73,7 +76,7 @@ class DVFBot{
                 // get best bid and ask
                 let [bid, ask] = await Promise.all([this.controller.orderBookBid(symbol),
                     this.controller.orderBookAsk(symbol)]);
-                cancel = this.sellPrice > ask || this.buyPrice < bid; 
+                cancel = this.lastOrderPrice != undefined && !(bid < this.lastOrderPrice && this.lastOrderPrice < ask); 
                 console.log(cancel);
                 // calculate the difference 
                 let diff = ask - bid;
@@ -82,7 +85,8 @@ class DVFBot{
                 // increase bid, decrease ask, update buyPrice and sellPrice
                 this.buyPrice = bid + diff * 0.5;
                 this.sellPrice = ask - diff * 0.5;
-    
+                    
+                console.log(`${this.lastOrderPrice}`)
                 console.log(`ask & bid prices updated \r\n bid price: ${this.buyPrice} \r\n sell price: ${this.sellPrice}`);
             } catch(e){
                 console.log("Error occured during calculating slippage");
