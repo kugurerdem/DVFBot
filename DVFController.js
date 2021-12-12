@@ -25,7 +25,7 @@ class DVF_Controller{
         })
 
         const orderId = await this.dvf.submitOrder(order); 
-        console.log(orderId);
+        return orderId;
     }
 
     async orderBookData(symbol){
@@ -105,6 +105,16 @@ class DVF_Controller{
         const signature = await this.dvf.sign(nonce)
 
         return Object.assign(obj, {nonce, signature})
+    }
+
+    async cancelOpenOrders(){
+        let signature = await this._sign({});
+        let canceledOrders = await this.dvf.cancelOpenOrders(signature);
+        for(let i = 0; i < canceledOrders.length; i++){
+            if(canceledOrders[i].canceled){
+                console.log(`${canceledOrders[i].orderId} is cancelled`);
+            }
+        }
     }
 }
 
