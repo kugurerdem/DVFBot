@@ -1,0 +1,17 @@
+{
+  "name": "deversifi-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^2.0.0",
+    "dotenv": "^10.0.0",
+    "dvf-client-js": "^3.0.3",
+    "web3": "^1.6.1"
+  }
+}
