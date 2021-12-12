@@ -65,7 +65,7 @@ class DVFBot{
         }
     }
 
-    async automatedMarketMaking(symbol, sleepT = 15000){
+    async automatedMarketMaking(symbol, sleepT = 30000){
         while(true){
             try{
                 // get best bid and ask
@@ -76,8 +76,8 @@ class DVFBot{
                 console.log(`difference between bid and ask prices: ${diff}`);
     
                 // increase bid, decrease ask, update buyPrice and sellPrice
-                this.buyPrice = bid + diff * 0.015;
-                this.sellPrice = ask - diff * 0.015;
+                this.buyPrice = bid + diff * 0.03;
+                this.sellPrice = ask - diff * 0.03;
     
                 console.log(`ask & bid prices updated \r\n bid price: ${this.buyPrice} \r\n sell price: ${this.sellPrice}`);
             } catch(e){
