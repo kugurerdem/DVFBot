@@ -3,7 +3,7 @@ const utils = require("./utils.js")
 class DVFBot{
     constructor(controller){
         this.controller = controller;
-        this.sleepTime = 5000;
+        this.sleepTime = 2500;
         this.buyPrice;
         this.sellPrice;
     }
@@ -65,26 +65,31 @@ class DVFBot{
         }
     }
 
-    async automatedMarketMaking(symbol, sleepT = 30000){
+    async automatedMarketMaking(symbol, sleepT = 10000){
         while(true){
+            let cancel = false;
             try{
                 // get best bid and ask
                 let [bid, ask] = await Promise.all([this.controller.orderBookBid(symbol),
                     this.controller.orderBookAsk(symbol)]);
+                cancel = this.sellPrice > ask || this.buyPrice < bid; 
+                
                 // calculate the difference 
                 let diff = ask - bid;
                 console.log(`difference between bid and ask prices: ${diff}`);
     
                 // increase bid, decrease ask, update buyPrice and sellPrice
-                this.buyPrice = bid + diff * 0.03;
-                this.sellPrice = ask - diff * 0.03;
+                this.buyPrice = bid + diff * 0.5;
+                this.sellPrice = ask - diff * 0.5;
     
                 console.log(`ask & bid prices updated \r\n bid price: ${this.buyPrice} \r\n sell price: ${this.sellPrice}`);
             } catch(e){
                 console.log("Error occured during calculating slippage");
             } finally{
-                await utils.sleep(sleepT);
-                await this.controller.cancelOpenOrders();
+                if(cancel){
+                    await this.controller.cancelOpenOrders();
+                }
+                await utils.sleep(this.sleepTime);
             }
         }
     }
