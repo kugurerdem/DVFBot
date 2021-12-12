@@ -19,7 +19,7 @@ A bot for designed to benefit from the reward program of DeversiFi
 - If you do not have any clue about what your stark_pk is and how to find it, I reccomend you to create another account by first filling the ETH_PK and STARK_PK properties in the .env file and then calling the following command from the console:
 
   ```
-  npm register
+  npm run register
   ```
 
 - After you have registered your account you can start the program by:

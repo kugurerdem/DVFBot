@@ -7,6 +7,7 @@ class DVFBot{
         this.buyPrice;
         this.sellPrice;
         this.lastOrderPrice;
+        this.marketMakeRatio = 0.2; // max 0.5 or otherwise you will lose money
     }
 
     /**
@@ -83,8 +84,8 @@ class DVFBot{
                 console.log(`difference between bid and ask prices: ${diff}`);
     
                 // increase bid, decrease ask, update buyPrice and sellPrice
-                this.buyPrice = bid + diff * 0.5;
-                this.sellPrice = ask - diff * 0.5;
+                this.buyPrice = bid + diff * this.marketMakeRatio;
+                this.sellPrice = ask - diff * this.marketMakeRatio;
                     
                 console.log(`${this.lastOrderPrice}`)
                 console.log(`ask & bid prices updated \r\n bid price: ${this.buyPrice} \r\n sell price: ${this.sellPrice}`);
