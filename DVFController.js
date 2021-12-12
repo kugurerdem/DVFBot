@@ -93,7 +93,7 @@ class DVF_Controller{
         let result = {};
         for(let symbol of symbols){
             let obj = balance.find(element => element.token === symbol);
-            result[symbol] = obj ? parseFloat(obj.balance) / Math.pow(10, 6) : 0;
+            result[symbol] = obj ? parseFloat(obj.available) / Math.pow(10, 6) : 0; // obj.balance -> obj.available
         }
         
         return result;
