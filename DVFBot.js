@@ -3,6 +3,9 @@ const utils = require("./utils.js")
 class DVFBot{
     constructor(controller){
         this.controller = controller;
+        this.sleepTime = 5000;
+        this.buyPrice;
+        this.sellPrice;
     }
 
     /**
@@ -30,8 +33,12 @@ class DVFBot{
             try{
                 let args = await this.sellHighestBalance(symbol);
                 await this.controller.tradeMarket(...args);
-            } finally{
-                await utils.sleep(5000);
+                console.log("Order opend");
+            } catch(e){
+                // something
+            }
+            finally{
+                await utils.sleep(this.sleepTime);
                 await this.controller.cancelOpenOrders();
             }
         } 
@@ -39,18 +46,47 @@ class DVFBot{
 
     // method for retreiving data 
     async tradeBetween(symbol, buyPrice, sellPrice){
+        this.buyPrice = buyPrice;
+        this.sellPrice = sellPrice;
         while(true){
-            try{
-                let args = await this.sellHighestBalance(symbol);
-                await this.controller.tradeLimit(...args, args[1][0] == '-' ? sellPrice : buyPrice);
-            } finally{
-                await utils.sleep(5000);
-            }
+            await this._tradeBetween(symbol);
         }
     }
 
-    async automatedMarketMaking(symbol){
-        
+    async _tradeBetween(symbol){
+        try{
+            let args = await this.sellHighestBalance(symbol);
+            await this.controller.tradeLimit(...args, args[1][0] == '-' ? this.sellPrice : this.buyPrice);
+            console.log("Order opened");
+        } catch(e){
+            // something
+        } finally{
+            await utils.sleep(this.sleepTime);
+        }
+    }
+
+    async automatedMarketMaking(symbol, sleepT = 15000){
+        while(true){
+            try{
+                // get best bid and ask
+                let [bid, ask] = await Promise.all([this.controller.orderBookBid(symbol),
+                    this.controller.orderBookAsk(symbol)]);
+                // calculate the difference 
+                let diff = ask - bid;
+                console.log(`difference between bid and ask prices: ${diff}`);
+    
+                // increase bid, decrease ask, update buyPrice and sellPrice
+                this.buyPrice = bid + diff * 0.015;
+                this.sellPrice = ask - diff * 0.015;
+    
+                console.log(`ask & bid prices updated \r\n bid price: ${this.buyPrice} \r\n sell price: ${this.sellPrice}`);
+            } catch(e){
+                console.log("Error occured during calculating slippage");
+            } finally{
+                await utils.sleep(sleepT);
+                await this.controller.cancelOpenOrders();
+            }
+        }
     }
 }
 
