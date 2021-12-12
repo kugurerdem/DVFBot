@@ -66,6 +66,7 @@ class DVFBot{
     }
 
     async automatedMarketMaking(symbol, sleepT = 10000){
+        await this.controller.cancelOpenOrders();
         while(true){
             let cancel = false;
             try{
@@ -73,7 +74,7 @@ class DVFBot{
                 let [bid, ask] = await Promise.all([this.controller.orderBookBid(symbol),
                     this.controller.orderBookAsk(symbol)]);
                 cancel = this.sellPrice > ask || this.buyPrice < bid; 
-                
+                console.log(cancel);
                 // calculate the difference 
                 let diff = ask - bid;
                 console.log(`difference between bid and ask prices: ${diff}`);
