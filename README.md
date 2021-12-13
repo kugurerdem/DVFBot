@@ -7,7 +7,7 @@ A bot for designed to benefit from the reward program of DeversiFi
 # Setup
 
 - In order to start the bot, you need to know your Ethereum private key and its corresponding stark private key.
-- Create a .env folder and put the following info in the directory of DVFBot.
+- Create a .env file in the folder and put the following info in the directory of DVFBot.
   ```
   ETH_PK=your_private_key
   STARK_PK=your_stark_pk
