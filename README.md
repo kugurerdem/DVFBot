@@ -48,7 +48,7 @@ This bot is not profitable anymore as the DeversiFi team removed the stablecoin 
 
 There are two main risks regarding to profitability of this bot. The first one is the price of DVF and the second one is the possible sudden increasement that can occur in the total volume on the platform (which would decrease your share on the rewards).
 
-You should also be cautious about the slippage according to your expected profibality rate (the ratio of slippage/fee paid should not exceet profibality rate).
+You should also be cautious about the slippage according to your expected profibality rate (the ratio of slippage/fee paid should not exceed profibality rate).
 
 # Log
 
