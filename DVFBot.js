@@ -3,11 +3,11 @@ const utils = require("./utils.js")
 class DVFBot{
     constructor(controller){
         this.controller = controller;
-        this.sleepTime = 2500;
+        this.sleepTime = 500;
         this.buyPrice;
         this.sellPrice;
         this.lastOrderPrice;
-        this.marketMakeRatio = 0.2; // max 0.5 or otherwise you will lose money
+        this.marketMakeRatio = 0.6; // max 0.5 or otherwise you will lose money
     }
 
     /**
